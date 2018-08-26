@@ -8,6 +8,7 @@
 #include <sys/types.h> 
 #include<dirent.h>
 #include<bits/stdc++.h>
+#include "copy.h"
 //#include "minimal.h"
 //#include"canonical.h"
 //#include "ls.h"
@@ -24,10 +25,26 @@ printf("........................................................................
 gotoxy(30,0);
 
 printf("Enter Your Command\n");
+int i,k;
 vector<string> v;
-int n,i,k;
-scanf("%d",&n);
-printf("%d",n);
+string x;
+while(cin.peek()!='\n')
+{cin>>x;
+v.push_back(x);
+}
+int n=v.size();
+if(strcmp(v[0].c_str(),"copy")==0)
+{
+for(i=1;i<n;i++)
+{
+int b=copyfile1((char*)v[i].c_str(),(char*)v[n-1].c_str());
+if(b==0)
+{printf("Sorry U Entered Wrong Path");
+break;
+}
+}
+printf("Copied");
 scanf("%d",&k);
+}
 }
 
