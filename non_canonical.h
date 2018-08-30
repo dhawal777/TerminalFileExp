@@ -9,6 +9,11 @@
 #include<dirent.h>
 #include<bits/stdc++.h>
 #include "copy.h"
+//#include "search.h"
+#include"copydir.h"
+#include"deletedir.h"
+#include"ls_r.h"
+#include "move.h"
 //#include "minimal.h"
 //#include"canonical.h"
 //#include "ls.h"
@@ -22,10 +27,13 @@ void non_canonical()
 	//while(1)
 	//{
 		//clear();
-	printf("                                              Welcome to Command Mode                                               \n");
-gotoxy(29,0);
+struct winsize w;
+ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+gotoxy(w.ws_row-10,0);
+printf("                                              Welcome to Command Mode                                               \n");
 printf("...........................................................................................................................");
-gotoxy(30,0);
+gotoxy(w.ws_row-8,0);
+
 
 printf("Enter Your Command\n");
 int i,k;
@@ -46,6 +54,11 @@ if(b==0)
 break;
 }
 }
+}
+if(strcmp(v[0].c_str(),"copy_dir")==0)
+{
+ char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
+ copydir((char*)v[1].c_str(),0,r);
 }
 ///1 create directory
 ///2 create file
@@ -103,8 +116,67 @@ if(strcmp(v[0].c_str(),"create_file")==0)
         }
     }
 }
+
+
+////////////////////////////
+//RENAME
+/////////////////////////
+
+if(strcmp(v[0].c_str(),"rename")==0)
+{
+	rename((char*)v[1].c_str(),(char*)v[n-1].c_str());
+}
+
+if(strcmp(v[0].c_str(),"delete_file")==0)
+{
+	remove(v[1].c_str());
+}
+if(strcmp(v[0].c_str(),"delete_folder")==0)
+{
+	deletedir((char*)v[1].c_str());
+}
+if(strcmp(v[0].c_str(),"goto")==0)
+{
+	//string p ="xdg-open "+v[1];
+      system(v[1].c_str());////////////////NOT WORKING
+}
+if(strcmp(v[0].c_str(),"snapshot")==0)
+{
+	cout<<"hello snapshot"<<endl;
+//printf("Directory scan of %s\n",topdir);
+
+ls_r((char*)v[1].c_str(),(char*)v[2].c_str());
+printf("done.\n");
+}
+if(strcmp(v[0].c_str(),"move")==0)
+{
+
+	struct stat mystat;
+	stat(v[1].c_str(),&mystat);
+
+   if(!S_ISDIR(mystat.st_mode))
+   {
+		   for(i=1;i<n;i++)
+		   {
+		    int b=copyfile1((char*)v[i].c_str(),(char*)v[n-1].c_str());
+		     if(b==0)
+		    {printf("Sorry U Entered Wrong Path");
+		    break;
+		    }
+		    remove((char*)v[i].c_str());
+		   }
+   }
+   else
+   {
+       char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
+        move((char*)v[1].c_str(),0,r);
+   }
+}
+
+
+
+
+
 scanf("%d",&k);
 
 }
-//}
-
