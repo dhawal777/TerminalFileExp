@@ -32,9 +32,11 @@ struct dirent **namelist;
     			
     		int i;
 lsls(s,0);
- int x,y; 
-gotoxy(1,1);
-x=1;
+r++;
+ int x,y,q; 
+gotoxy(3,1);
+q=3;
+x=3;
 y=1;
 while(1){
 
@@ -44,10 +46,10 @@ if(j=='\n')
 {
 //string s;
 stack1.push(s);
-s=s+"/"+namelist[x-2]->d_name;
+s=s+"/"+namelist[q-3]->d_name;
 //stack1.push(s);
-printf("%s\n",s);
-if(namelist[x-2]->d_type==8)
+//printf("%s\n",s);
+if(namelist[q-3]->d_type==8)
 {
 string p ="xdg-open "+s;
 system(p.c_str());
@@ -55,7 +57,7 @@ system(p.c_str());
 else
 {
 //stack1.push(s);
-printf("%s\n",s);
+//printf("%s\n",s);
 func(s);
 }
 }
@@ -75,30 +77,62 @@ func(s1);
 }
 /*else if(j==':')
 {
-    tcsetattr(0,TCSANOW,&initial_settings);
+    //tcsetattr(0,TCSANOW,&initial_settings);
     //clear();
-    non_canonical();
+    non_canonical(s,r);
 
 }*/
 else
 {
 j1=getchar();
 j2=getchar();
-printf("jjjjjjjjjjjjjjjjjjjjjjj= %c",j2);
+//printf("jjjjjjjjjjjjjjjjjjjjjjj= %c",j2);
 if(j2=='A')
-{
-x--;
-if(x<=r)
-lsls(s,r--);
-gotoxy(x,y);
-}
-if(j2=='B')
-{
-++x;
-if(x>w.ws_row)
-    lsls(s,r++);
-gotoxy(x,y);
-}
+    {
+    x--;
+    q--;
+    if(x==2&&r==1)
+    {
+        q++;
+        x++;
+        gotoxy(x,y);
+    }
+    else if(x==2&&r>1)
+    {
+        x++;
+        clear();
+        lsls(s,r--);
+        gotoxy(x,y);
+    }
+    else
+        gotoxy(x,y);
+    }
+    if(j2=='B')
+    {
+    x++;
+    q++;
+    if(q==n+4)
+    {
+      x--;
+      q--;
+      gotoxy(x,y);
+    }
+    else if(x==w.ws_row-7&&r<n-(w.ws_row-9))
+    {
+       x--;
+        clear();
+      lsls(s,r++);
+      gotoxy(x,y);
+    }
+    else if(x==w.ws_row-7&&r==n-w.ws_row+9)
+    {
+        q--;
+        x--;
+        gotoxy(x,y);
+    }
+    else
+    gotoxy(x,y);
+    }
 
 if(j2=='D')
 {
@@ -144,7 +178,7 @@ clear();
     int i;
     lsls(argv[1],0);
      r++;
-    gotoxy(1,1);
+    gotoxy(3,1);
     struct termios initial_settings, new_settings;
     tcgetattr(0,&initial_settings);
     new_settings = initial_settings;
@@ -152,12 +186,13 @@ clear();
     new_settings.c_lflag &= ~ECHO;
     if(tcsetattr(0, TCSANOW, &new_settings) != 0) 
     fprintf(stderr,"could not set attributes\n");
-    printf("dhawal");
+    //printf("dhawal");
 
-    printf("p=%d\n",p);
-    printf ("lines %d\n", w.ws_row);
-    int x,y;
-    x=1;
+   // printf("p=%d\n",p);
+   // printf ("lines %d\n", w.ws_row);
+    int x,y,q;
+    x=3;
+    q=3;
     y=1;
 
 while(1){
@@ -168,8 +203,8 @@ j=getchar();
 if(j=='\n')
 {
 stack1.push(s);
-s=s+"/"+namelist[x-2]->d_name;
-if(namelist[x-2]->d_type==8)
+s=s+"/"+namelist[q-3]->d_name;
+if(namelist[q-3]->d_type==8)
 {
 string p ="xdg-open "+s;
 system(p.c_str());
@@ -177,7 +212,7 @@ system(p.c_str());
 else
 {
 //stack1.push(s);
-printf("%s\n",s);
+//printf("%s\n",s);
 func(s);
 }
 }
@@ -199,7 +234,7 @@ else if(j==':')
 {
     tcsetattr(0,TCSANOW,&initial_settings);
     //clear();
-    non_canonical();
+    non_canonical(s,r);
 
 }
 else
@@ -207,33 +242,59 @@ else
 j1=getchar();
 j2=getchar();
 //printf("%cllllllllllllllllllllllllllllllllllllllllllllllll",j2);
-    if(j2=='A'&&x>=1)
+    if(j2=='A')
     {
     x--;
-    if(x<=r&&x>=0)
-        {clear();
-    lsls(s,r--);
+    q--;
+    if(x==2&&r==1)
+    {
+        q++;
+        x++;
+        gotoxy(x,y);
     }
-    gotoxy(x,y);
+    else if(x==2&&r>1)
+    {
+        x++;
+        clear();
+        lsls(s,r--);
+        gotoxy(x,y);
+    }
+    else
+        gotoxy(x,y);
     }
     if(j2=='B')
     {
     x++;
-    if(x>w.ws_row-10-r)
+    q++;
+    if(q==n+4)
     {
+      x--;
+      q--;
+      gotoxy(x,y);
+    }
+    else if(x==w.ws_row-7&&r<n-(w.ws_row-9))
+    {
+       x--;
         clear();
       lsls(s,r++);
+      gotoxy(x,y);
     }
-    gotoxy(x-r,y);
+    else if(x==w.ws_row-7&&r==n-w.ws_row+9)
+    {
+        q--;
+        x--;
+        gotoxy(x,y);
     }
-
-    if(j2=='D')
+    else
+    gotoxy(x,y);
+    }
+   if(j2=='D')
     {
     //printf("%cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",j2);
     string s1=stack1.top();
     stack1.pop();
     stack2.push(s);
-    func(s1);
+   func(s1);
 
     }
     if(j2=='C')
