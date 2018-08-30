@@ -14,6 +14,7 @@
 #include"deletedir.h"
 #include"ls_r.h"
 #include "move.h"
+#include "print.h"
 //#include "minimal.h"
 //#include"canonical.h"
 //#include "ls.h"
@@ -22,17 +23,19 @@
 #define clear() printf("\033[H\033[J")
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
-void non_canonical()
+void non_canonical(string s,int r)
 {
 	//while(1)
 	//{
 		//clear();
+	while(1)
+	{
 struct winsize w;
 ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-gotoxy(w.ws_row-10,0);
+gotoxy(w.ws_row-8,0);
 printf("                                              Welcome to Command Mode                                               \n");
 printf("...........................................................................................................................");
-gotoxy(w.ws_row-8,0);
+gotoxy(w.ws_row-6,0);
 
 
 printf("Enter Your Command\n");
@@ -173,10 +176,8 @@ if(strcmp(v[0].c_str(),"move")==0)
    }
 }
 
-
-
-
-
+print(s,r);
+gotoxy(29,0);
 scanf("%d",&k);
-
+}
 }
