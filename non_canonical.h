@@ -15,7 +15,8 @@
 #include"ls_r.h"
 #include "move.h"
 #include "print.h"
-//#include "minimal.h"
+#include "search.h"
+#include "search_wh.h"
 //#include"canonical.h"
 //#include "ls.h"
 //#include "copy.h"
@@ -127,29 +128,46 @@ if(strcmp(v[0].c_str(),"create_file")==0)
 
 if(strcmp(v[0].c_str(),"rename")==0)
 {
+	string s=".";
+	bool y=search1((char*)s.c_str(),0,(char*)v[1].c_str());
+	if(y)
 	rename((char*)v[1].c_str(),(char*)v[n-1].c_str());
+    else
+    cout<<"NO SUCH FILE IN CURRENT DIRECTORY"<<endl;
 }
 
 if(strcmp(v[0].c_str(),"delete_file")==0)
 {
-	remove(v[1].c_str());
+	cout<<"file"<<endl;
+	string s=".";
+	bool y=search1((char*)s.c_str(),0,(char*)v[1].c_str());
+	if(y)
+	{remove(v[1].c_str());
+	printf("Deleted Files");
+    }
+    else
+    {
+    	cout<<"NO SUCH FILE"<<endl;
+    }
+
 }
 if(strcmp(v[0].c_str(),"delete_folder")==0)
 {
 	deletedir((char*)v[1].c_str());
+	printf("Deleted");
 }
 if(strcmp(v[0].c_str(),"goto")==0)
 {
 	//string p ="xdg-open "+v[1];
-      system(v[1].c_str());////////////////NOT WORKING
-}
+	print(v[0].c_str(),0);
+ }
 if(strcmp(v[0].c_str(),"snapshot")==0)
 {
-	cout<<"hello snapshot"<<endl;
+	//cout<<"hello snapshot"<<endl;
 //printf("Directory scan of %s\n",topdir);
 
 ls_r((char*)v[1].c_str(),(char*)v[2].c_str());
-printf("done.\n");
+printf("Snapshot done open file %s\n",(char*)v[2].c_str());
 }
 if(strcmp(v[0].c_str(),"move")==0)
 {
@@ -159,25 +177,48 @@ if(strcmp(v[0].c_str(),"move")==0)
 
    if(!S_ISDIR(mystat.st_mode))
    {
+   	int xx=0;
 		   for(i=1;i<n;i++)
 		   {
 		    int b=copyfile1((char*)v[i].c_str(),(char*)v[n-1].c_str());
 		     if(b==0)
 		    {printf("Sorry U Entered Wrong Path");
+		       xx=1;
 		    break;
 		    }
 		    remove((char*)v[i].c_str());
 		   }
+		   if(xx==0)
+		   printf("Moved Files");
    }
    else
    {
        char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
         move((char*)v[1].c_str(),0,r);
+        printf("+Moved Directories\n");
    }
 }
+if(strcmp(v[0].c_str(),"search")==0)
+{
+	cout<<"hello"<<endl;
+	string s=".";
+	bool y=search1((char*)s.c_str(),0,(char*)v[1].c_str());
+	if(y)
+	{
+		cout<<"champ"<<endl;
+		search2((char*)s.c_str(),0,(char*)v[1].c_str());
+		cout<<"I am back"<<endl;
+		
+	}
+	else
+	{
+		cout<<"NO SUCH FILE EXIST"<<endl;
+	}	
 
-print(s,r);
-gotoxy(29,0);
+}
+
+//print(s,r);
+//gotoxy(29,0);
 scanf("%d",&k);
 }
 }
