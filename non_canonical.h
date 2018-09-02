@@ -9,7 +9,6 @@
 #include<dirent.h>
 #include<bits/stdc++.h>
 #include "copy.h"
-//#include "search.h"
 #include"copydir.h"
 #include"deletedir.h"
 #include"ls_r.h"
@@ -17,20 +16,17 @@
 #include "print.h"
 #include "search.h"
 #include "search_wh.h"
-//#include"canonical.h"
-//#include "ls.h"
-//#include "copy.h"
-//#include "xdg_open.h"
+//#include "normal_2.h"
 #define clear() printf("\033[H\033[J")
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
-void non_canonical(string s,int r)
+string non_canonical(string s,int r,stack<string> stack1,stack<string> stack2)
 {
 	//while(1)
 	//{
 		//clear();
-	while(1)
-	{
+	
+		int k5=0;
 struct winsize w;
 ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 gotoxy(w.ws_row-8,0);
@@ -40,15 +36,63 @@ gotoxy(w.ws_row-6,0);
 
 
 printf("Enter Your Command\n");
-int i,k;
+int x1=w.ws_row-6+1;
+int y=1;
+int i;
 vector<string> v;
 string x;
-while(cin.peek()!='\n')
-{cin>>x;
-v.push_back(x);
+char c;
+while(1)
+{  
+
+  
+  gotoxy(x1,y);
+  c=getchar();
+  if(c==27)
+    return s;
+  if(c=='\n')break;
+  else if(c==127){
+       y--;
+       gotoxy(x1,y);
+       cout<<" ";
+       x.pop_back();
+
+  }
+  else {
+        x.push_back(c);
+        cout<<c;
+        y++;
+  }
+
+
+}
+int n1=x.length();
+for(i=0;i<n1;)
+{
+	string s;
+	
+   while(x[i]!=' '&& i<n1)
+   {
+      s=s+x[i];
+      i++;
+   }
+   v.push_back(s);
+   i++;
 }
 int n=v.size();
+////////////COPY////////////////////////////////////
 if(strcmp(v[0].c_str(),"copy")==0)
+{
+
+ struct stat mystat;
+  stat(v[1].c_str(),&mystat);
+
+   if(S_ISDIR(mystat.st_mode))
+   {
+    char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
+     copydir((char*)v[1].c_str(),0,r);
+   }
+else
 {
 for(i=1;i<n;i++)
 {
@@ -59,22 +103,25 @@ break;
 }
 }
 }
-if(strcmp(v[0].c_str(),"copy_dir")==0)
+}
+/*if(strcmp(v[0].c_str(),"copy_dir")==0)
 {
  char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
  copydir((char*)v[1].c_str(),0,r);
-}
+}*/
+
 ///1 create directory
 ///2 create file
 ///3 create file inside directory
+
 if(strcmp(v[0].c_str(),"create_dir")==0)
 {
 for(i=1;i<n;i++)
 {
 	if(n>2)
 	{
-		string s=v[n-1]+"/"+v[i];
-        const char *folderadd= s.c_str();
+		string s1=v[n-1]+"/"+v[i];
+        const char *folderadd= s1.c_str();
 struct stat st = {0};
  if (stat(folderadd, &st) == -1)
  mkdir(folderadd,666);
@@ -92,6 +139,7 @@ struct stat st = {0};
    }
 }
 }
+////////////////CREATE FILE/////////////////////////////////
 if(strcmp(v[0].c_str(),"create_file")==0)
 {
 	const char* folderr;
@@ -135,7 +183,7 @@ if(strcmp(v[0].c_str(),"rename")==0)
     else
     cout<<"NO SUCH FILE IN CURRENT DIRECTORY"<<endl;
 }
-
+////////////////////DELETE FILE/////////////////////////////
 if(strcmp(v[0].c_str(),"delete_file")==0)
 {
 	cout<<"file"<<endl;
@@ -151,16 +199,19 @@ if(strcmp(v[0].c_str(),"delete_file")==0)
     }
 
 }
+//////////////////////DELETE FOLDER/////////////////////////
 if(strcmp(v[0].c_str(),"delete_folder")==0)
 {
 	deletedir((char*)v[1].c_str());
 	printf("Deleted");
 }
+/////////////////GOTO////////////////////////////////////////
 if(strcmp(v[0].c_str(),"goto")==0)
 {
-	//string p ="xdg-open "+v[1];
-	print(v[0].c_str(),0);
- }
+	return v[1];
+
+}
+/////////////////////SNAPSHOT/////////////////////////////////
 if(strcmp(v[0].c_str(),"snapshot")==0)
 {
 	//cout<<"hello snapshot"<<endl;
@@ -169,6 +220,7 @@ if(strcmp(v[0].c_str(),"snapshot")==0)
 ls_r((char*)v[1].c_str(),(char*)v[2].c_str());
 printf("Snapshot done open file %s\n",(char*)v[2].c_str());
 }
+////////////////////////MOVE///////////////////////////////////
 if(strcmp(v[0].c_str(),"move")==0)
 {
 
@@ -198,27 +250,47 @@ if(strcmp(v[0].c_str(),"move")==0)
         printf("+Moved Directories\n");
    }
 }
+///////////////////////////SEARCH/////////////////////////////////////////
 if(strcmp(v[0].c_str(),"search")==0)
 {
 	cout<<"hello"<<endl;
-	string s=".";
-	bool y=search1((char*)s.c_str(),0,(char*)v[1].c_str());
+	string s1=".";
+	bool y=search1((char*)s1.c_str(),0,(char*)v[1].c_str());
 	if(y)
 	{
 		cout<<"champ"<<endl;
-		search2((char*)s.c_str(),0,(char*)v[1].c_str());
-		cout<<"I am back"<<endl;
+		search2((char*)s1.c_str(),0,(char*)v[1].c_str(),s);
+		k5=1;
+		//cout<<"I am back"<<endl;
 		
 	}
 	else
 	{
 		cout<<"NO SUCH FILE EXIST"<<endl;
 	}	
-
+  //break;
 }
-
-//print(s,r);
-//gotoxy(29,0);
+if(k5==1)
+    {
+    	char a,b,c;
+    	a=getchar();
+    	b=getchar();
+    	c=getchar();
+    	if(c=='D')
+    		{clear();
+    		return s;
+    	    }
+    }
+/*{clear();
+ //func(s);
+print(s,r);
+gotoxy(29,0);
+k=getchar();
+}
+else
 scanf("%d",&k);
+*/
+//scanf("%d",&k);
+    return s;
 }
-}
+
