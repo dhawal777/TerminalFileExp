@@ -11,9 +11,6 @@
 #include<sys/ioctl.h>
 #include "lsls.h"
 #include "non_canonical.h"
-//#include "normal_2.h"
-//#include "non_canonical.h"
-
 #define clear() printf("\033[H\033[J")
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
@@ -29,8 +26,7 @@ void func(string s,stack<string> stack1,stack<string> stack2)
   int r=0;
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    //printf ("lines %d\n", w.ws_row);
-    //printf ("columns %d\n", w.ws_col);
+   
  
 printf("%s\n",s.c_str());
 struct dirent **namelist;
@@ -52,11 +48,8 @@ char j,j1,j2;
 j=getchar();
 if(j=='\n')
 {
-//string s;
 stack1.push(s);
 s=s+"/"+namelist[q-3]->d_name;
-//stack1.push(s);
-//printf("%s\n",s);
 if(namelist[q-3]->d_type==8)
 {
 string p ="xdg-open "+s;
@@ -64,8 +57,6 @@ system(p.c_str());
 }
 else
 {
-//stack1.push(s);
-//printf("%s\n",s);
 func(s,stack1,stack2);
 }
 }
@@ -77,7 +68,6 @@ func(p,stack1,stack2);
 }
 else if(j==127)
 {
-//printf("%cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",j2);
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
@@ -85,9 +75,6 @@ func(s1,stack1,stack2);
 }
 else if(j==':')
 {
-    //tcsetattr(0,TCSANOW,&initial_settings);
-    //clear();
-   // non_canonical(s,r);
     break;
 
 }
@@ -95,7 +82,6 @@ else
 {
 j1=getchar();
 j2=getchar();
-//printf("jjjjjjjjjjjjjjjjjjjjjjj= %c",j2);
 if(j2=='A')
     {
     x--;
@@ -143,7 +129,7 @@ if(j2=='A')
     gotoxy(x,y);
     }
 
-if(j2=='D')
+if(j2=='D'&&!stack1.empty())
 {
 string s1=stack1.top();
 stack1.pop();
@@ -152,7 +138,7 @@ func(s1,stack1,stack2);
 
 
 }
-if(j2=='C')
+if(j2=='C'&&!stack2.empty())
 {
 string s1=stack2.top();
 stack2.pop();
@@ -169,11 +155,6 @@ func(s1,stack1,stack2);
 }
 int main(int argc,char *argv[])
 {
-  //  struct winsize w;
-   // ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    //printf ("lines %d\n", w.ws_row);
-    //printf ("columns %d\n", w.ws_col);
-//printf("hello\n");
 
 clear();
 
@@ -189,14 +170,10 @@ clear();
     new_settings.c_lflag &= ~ECHO;
     if(tcsetattr(0, TCSANOW, &new_settings) != 0) 
     fprintf(stderr,"could not set attributes\n");
-    //printf("dhawal");
-
-   // printf("p=%d\n",p);
-   // printf ("lines %d\n", w.ws_row);
 while(1)
 {
 printf("Welcome to Normal Mode\n");
-    //printf("Press CTRL+C or Q to quit.\n");
+   
     struct dirent **namelist;
     int n;
     int r=0;
@@ -227,8 +204,6 @@ system(p.c_str());
 }
 else
 {
-//stack1.push(s);
-//printf("%s\n",s);
 func(s,stack1,stack2);
 }
 }
@@ -240,7 +215,7 @@ func(p,stack1,stack2);
 }
 else if(j==127)
 {
-//printf("%cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",j2);
+
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
@@ -248,9 +223,6 @@ func(s1,stack1,stack2);
 }
 else if(j==':')
 {
-    //tcsetattr(0,TCSANOW,&initial_settings);
-    //clear();
-    //non_canonical(s,r);
     break;
 
 }
@@ -258,7 +230,6 @@ else
 {
 j1=getchar();
 j2=getchar();
-//printf("%cllllllllllllllllllllllllllllllllllllllllllllllll",j2);
     if(j2=='A')
     {
     x--;
@@ -305,18 +276,17 @@ j2=getchar();
     else
     gotoxy(x,y);
     }
-   if(j2=='D')
+   if(j2=='D'&&!stack1.empty())
     {
-    //printf("%cCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",j2);
+    
     string s1=stack1.top();
     stack1.pop();
     stack2.push(s);
    func(s1,stack1,stack2);
 
     }
-    if(j2=='C')
+    if(j2=='C'&&!stack2.empty())
     {
-    //printf("%cllllllllllllllllllllllllllllllllllllllllllllllll",j2);
     string s1=stack2.top();
     stack2.pop();
     stack1.push(s);
@@ -328,6 +298,5 @@ j2=getchar();
 string s1=non_canonical(s,r,stack1,stack2);
 func(s1,stack1,stack2);
 }
-//tcsetattr(0,TCSANOW,&initial_settings);
 
 }
