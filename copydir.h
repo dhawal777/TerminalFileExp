@@ -7,11 +7,12 @@
 #include<bits/stdc++.h>
 //#include"copy.h"
 using namespace std;
+////////////////MAKE DIRECTORY///////////////////////////////////////
 char * mkdir1(char *s,char *d)
 {
   char * bname = basename(s); 
   //printf("bname=%s\n",bname);
-  char *folderadd= bname;
+  //char *folderadd= bname;
   char * str="/";
   char * str4 = (char *) malloc(1 + strlen(s)+ strlen(d) );
   strcpy(str4,d);
@@ -21,10 +22,14 @@ char * mkdir1(char *s,char *d)
  // const char * e=(const char *)d + (const char *)str3 + (const char*)folderadd;
  //string e=d+str3+folderadd;
  //cout<<e<<endl;
+  //struct dirent *myfile;
+    struct stat mystat;
+  stat(s,&mystat);
+  int fileMode = mystat.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
   struct stat st = {0};
   if (stat(str4, &st) == -1)
   { 
-     mkdir(str4,0777);
+     mkdir(str4,fileMode);
   }
   return str4;
  }
@@ -39,13 +44,12 @@ char *convert(char * a,char *b)
              return str3;
 }
  void copydir(char *dir, int depth,char *wd)
-
 {
         char * g="hello";
         printf("hello %s\n",g);
         printf("wd=%s\n",wd);
         DIR *dp,*desti;
-        struct dirent *entry,*entry1;
+        struct dirent *entry;
         struct stat statbuf;
         if((dp = opendir(dir)) == NULL) 
               {
