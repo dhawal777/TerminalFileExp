@@ -11,26 +11,34 @@
 #include<sys/ioctl.h>
 #include "lsls.h"
 #include "non_canonical.h"
+//#include "normal_2.h"
+//#include "non_canonical.h"
+
 #define clear() printf("\033[H\033[J")
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
 stack<string> stack1,stack2;
-
-void func(string s)
+void func(string s,stack<string> stack1,stack<string> stack2)
 {
- clear();
- struct winsize w;
- ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+   
+ while(1)
+ {
+
+  clear();
+  int r=0;
+  struct winsize w;
+  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     //printf ("lines %d\n", w.ws_row);
     //printf ("columns %d\n", w.ws_col);
- int r=0;
+ 
 printf("%s\n",s.c_str());
 struct dirent **namelist;
-    	int n;
+        int n;
      
-    		n=scandir(s.c_str(),&namelist,NULL,alphasort);
-    			
-    		int i;
+            n=scandir(s.c_str(),&namelist,NULL,alphasort);
+                
+            int i;
 lsls(s,0);
 r++;
  int x,y,q; 
@@ -58,14 +66,14 @@ else
 {
 //stack1.push(s);
 //printf("%s\n",s);
-func(s);
+func(s,stack1,stack2);
 }
 }
 else if(j=='h')
 {
 string p=".";
 stack2.push(s);
-func(p);
+func(p,stack1,stack2);
 }
 else if(j==127)
 {
@@ -73,15 +81,16 @@ else if(j==127)
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1);
+func(s1,stack1,stack2);
 }
-/*else if(j==':')
+else if(j==':')
 {
     //tcsetattr(0,TCSANOW,&initial_settings);
     //clear();
-    non_canonical(s,r);
+   // non_canonical(s,r);
+    break;
 
-}*/
+}
 else
 {
 j1=getchar();
@@ -139,7 +148,7 @@ if(j2=='D')
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1);
+func(s1,stack1,stack2);
 
 
 }
@@ -148,11 +157,15 @@ if(j2=='C')
 string s1=stack2.top();
 stack2.pop();
 stack1.push(s);
-func(s1);
+func(s1,stack1,stack2);
 
 }
 }
 }
+string s1=non_canonical(s,r,stack1,stack2);
+func(s1,stack1,stack2);
+}
+
 }
 int main(int argc,char *argv[])
 {
@@ -168,17 +181,7 @@ clear();
     struct winsize w;
  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w); 
  
-    printf("Welcome to Normal Mode\n");
-    //printf("Press CTRL+C or Q to quit.\n");
-    struct dirent **namelist;
-    int n;
-    int r=0;
-    n=scandir(argv[1],&namelist,NULL,alphasort);
-    int p=n;
-    int i;
-    lsls(argv[1],0);
-     r++;
-    gotoxy(3,1);
+    
     struct termios initial_settings, new_settings;
     tcgetattr(0,&initial_settings);
     new_settings = initial_settings;
@@ -190,13 +193,26 @@ clear();
 
    // printf("p=%d\n",p);
    // printf ("lines %d\n", w.ws_row);
+while(1)
+{
+printf("Welcome to Normal Mode\n");
+    //printf("Press CTRL+C or Q to quit.\n");
+    struct dirent **namelist;
+    int n;
+    int r=0;
+    n=scandir(argv[1],&namelist,NULL,alphasort);
+    int p=n;
+    int i;
+    lsls(argv[1],0);
+     r++;
+    gotoxy(3,1);
     int x,y,q;
     x=3;
     q=3;
     y=1;
-
-while(1){
 string s;
+while(1){
+
 s=argv[1];
 char j,j1,j2;
 j=getchar();
@@ -213,14 +229,14 @@ else
 {
 //stack1.push(s);
 //printf("%s\n",s);
-func(s);
+func(s,stack1,stack2);
 }
 }
 else if(j=='h')
 {
 string p=".";
 stack2.push(p);
-func(p);
+func(p,stack1,stack2);
 }
 else if(j==127)
 {
@@ -228,13 +244,14 @@ else if(j==127)
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1);
+func(s1,stack1,stack2);
 }
 else if(j==':')
 {
-    tcsetattr(0,TCSANOW,&initial_settings);
+    //tcsetattr(0,TCSANOW,&initial_settings);
     //clear();
-    non_canonical(s,r);
+    //non_canonical(s,r);
+    break;
 
 }
 else
@@ -294,7 +311,7 @@ j2=getchar();
     string s1=stack1.top();
     stack1.pop();
     stack2.push(s);
-   func(s1);
+   func(s1,stack1,stack2);
 
     }
     if(j2=='C')
@@ -303,11 +320,14 @@ j2=getchar();
     string s1=stack2.top();
     stack2.pop();
     stack1.push(s);
-    func(s1);
+    func(s1,stack1,stack2);
 
 }
 }
 }
-tcsetattr(0,TCSANOW,&initial_settings);
+string s1=non_canonical(s,r,stack1,stack2);
+func(s1,stack1,stack2);
+}
+//tcsetattr(0,TCSANOW,&initial_settings);
 
 }
