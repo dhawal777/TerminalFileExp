@@ -53,6 +53,7 @@ if(j=='\n')
         continue;
 stack1.push(s);
 s=s+"/"+namelist[q-3]->d_name;
+/////////////////OPENING FILE//////////////////////////////////////////////
 if(namelist[q-3]->d_type==8)
 {
 string p ="xdg-open "+s;
@@ -63,20 +64,20 @@ else
 func(s,stack1,stack2,s5);
 }
 }
-else if(j=='h')
+else if(j=='h')///////////////////////HOME//////////////////////////////
 {
 //string p=".";
 stack2.push(s);
 func(s5,stack1,stack2,s5);
 }
-else if(j==127)
+else if(j==127)////////////////BACKSPACE////////////////////////////////
 {
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
 func(s1,stack1,stack2,s5);
 }
-else if(j==':')
+else if(j==':')////////////////////ENTERING COMMAND MODE//////////////////////
 {
     break;
 
@@ -85,7 +86,7 @@ else
 {
 j1=getchar();
 j2=getchar();
-if(j2=='A')
+if(j2=='A')///////////////////////////////UPWARD KEY///////////////////////////////
     {
     x--;
     q--;
@@ -105,7 +106,7 @@ if(j2=='A')
     else
         gotoxy(x,y);
     }
-    if(j2=='B')
+    if(j2=='B')///////////////////////DOWNWARD KEY/////////////////////////////
     {
     x++;
     q++;
@@ -132,7 +133,7 @@ if(j2=='A')
     gotoxy(x,y);
     }
 
-if(j2=='D'&&!stack1.empty())
+if(j2=='D'&&!stack1.empty())//////////////////////LEFT KEY//////////////////////////
 {
 string s1=stack1.top();
 stack1.pop();
@@ -141,7 +142,7 @@ func(s1,stack1,stack2,s5);
 
 
 }
-if(j2=='C'&&!stack2.empty())
+if(j2=='C'&&!stack2.empty())//////////////////RIGHT KEY/////////////////////////////////
 {
 string s1=stack2.top();
 stack2.pop();
@@ -165,7 +166,7 @@ clear();
     struct winsize w;
  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w); 
  
-    
+    ///SETTING INVERT///////////////////
     struct termios initial_settings, new_settings;
     tcgetattr(0,&initial_settings);
     new_settings = initial_settings;
@@ -213,7 +214,7 @@ else
 func(s,stack1,stack2,s5);
 }
 }
-else if(j=='h')
+else if(j=='h')////////////////////HOME///////////////////////////////
 {
 //string p=".";
 stack2.push(s);
