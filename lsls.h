@@ -1,45 +1,71 @@
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
+//#include<type.h>
 #include <stdlib.h>
-#include <dirent.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <stdio.h>                   
+#include <string>
+#include <errno.h>
+#include <typeinfo>
+#include <sys/stat.h> 
+#include <sys/types.h> 
+#include<dirent.h>
+#include<sys/ioctl.h>
 #include <pwd.h>
 #include <grp.h>
 #include<time.h>
 #include<bits/stdc++.h>
+//#include "minimal.h"
+//#include"canonical.h"
+//#include "non_canonical.h"
+//#include "copy.h"
+//#include "xdg_open.h"
+#define clear() printf("\033[H\033[J")
+#define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
-void lsls(string s)
+void lsls(string s,int x)
 {
+//cout<<" *********************************************"<<endl;
+   /*struct termios initial_settings, new_settings;
+tcgetattr(0,&initial_settings);
+new_settings = initial_settings;
+new_settings.c_lflag &= ~ICANON;
+new_settings.c_lflag &= ~ECHO;
+if(tcsetattr(0, TCSANOW, &new_settings) != 0) 
+fprintf(stderr,"could not set attributes\n");
+*/
+
     DIR *mydir;
     struct dirent *myfile;
     struct stat mystat;
+    int ret;
     struct passwd  *pwd;
     struct group   *grp;
-
-    char buf[512];
-    mydir = opendir(s.c_str());
-    while((myfile = readdir(mydir)) != NULL)
-   {
-    // buf=s.c_str();
-        //lsls(s)
-        ///YAHA STACK USE KARNA HAI AUR USME MYFILE_DNAME PUSH KARNA HAI
-        sprintf(buf, "%s/%s", s.c_str(), myfile->d_name);
-        stat(buf, &mystat);
-        //printf("I-node number:            %ld\n", (long) mystat.st_ino);
-
-          // printf("Mode:                     %lo (octal)\n",
-                   //(unsigned long) mystat.st_mode);
-
+struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+ struct dirent **namelist;
+    	int n;
+     //cout<<s.c_str()<<endl;
+    n=scandir(s.c_str(),&namelist,NULL,alphasort);
+  int i;
+     //cout<<n<<endl;
+        //ret=stat(s.c_str(), &mystat);
+  gotoxy(3,1);
+    i=x;
+    int j=3,k=1;
+  for(;i<min(w.ws_row-10+x,n);i++)
+{
+  k=1;
+//cout<<"hello"<<endl;
+  string d=s+"/"+namelist[i]->d_name;
+    stat(d.c_str(),&mystat);
    int fileMode = mystat.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
-     //printf("chmod: %o\n", fileMode);
-          // int fileMode;       
- 
-        /* print a leading dash as start of file/directory permissions */
-        //printf("-");
-       // fileMode = fileattrib.st_mode;
-        /* Check owner permissions */
-//printf("\n");
+   //cout<<"hello"<<endl;
+        if (S_ISDIR(mystat.st_mode))
+          printf("d");
+        else
+          printf("-");
         if ((fileMode & S_IRUSR) && (fileMode & S_IREAD))
           printf("r");
         else
@@ -79,32 +105,31 @@ void lsls(string s)
           printf("x");
         else
         printf("-");
-          printf("     ");
-           //printf("Link count:               %ld\n", (long) mystat.st_nlink);
-          /* printf("UID=%ld   GID=%ld ",
-                   (long) mystat.st_uid, (long) mystat.st_gid);*/
+         // printf("   ");
+          k=k+11;
+          gotoxy(j,k);
             if ((pwd = getpwuid(mystat.st_uid)) != NULL)
-              printf("%s ", pwd->pw_name);
+              printf("%s", pwd->pw_name);
+            k=k+10;
+            gotoxy(j,k);
              if ((grp = getgrgid(mystat.st_gid)) != NULL)
-        printf("%s ", grp->gr_name);
-          // printf("Preferred I/O block size: %ld bytes\n",
-            //       (long) mystat.st_blksize);
-           printf("%lld ",(long long) mystat.st_size);
-           printf("%lld ",(long long) mystat.st_blocks);
+        printf("%s", grp->gr_name);
+             k=k+10;
+             gotoxy(j,k);
+         printf("%lld",(long long) mystat.st_size);
+           //printf("%lld ",(long long) mystat.st_blocks);
 //Last status change:
-           if(myfile->d_type!=8)
-          printf("\033[1;34m%s\033[0m",myfile->d_name);
+             k=k+6;
+             gotoxy(j,k);
+           if(namelist[i]->d_type!=8)
+          printf("\033[1;34m%s\033[0m",namelist[i]->d_name);
            else
-           printf("%s ",myfile->d_name);
-           printf("%s", ctime(&mystat.st_ctime));
-//Last file access: 
-          // printf("%s ", ctime(&mystat.st_atime));
-//Last file modification:
-         //  printf("%s ", ctime(&mystat.st_mtime));
-        //printf("%zu",mystat.st_size);
+           printf("%s",namelist[i]->d_name);
 
-       // printf("%s ", myfile->d_name);
-        //printf("%
+         gotoxy(j,k+30);
+          printf("%s",ctime(&mystat.st_mtime));
+          j++;
     }
-    closedir(mydir);
+     gotoxy(3,1);
+   // closedir(mydir);
 }
