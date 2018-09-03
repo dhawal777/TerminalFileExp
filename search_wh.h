@@ -72,9 +72,9 @@ closedir(dp);
 clear();
 gotoxy(1,1);
 for(int i=0;i<v.size();i++)
-   {printf("%s\n",(char*)v[i].c_str());
+   {printf("%s\n",(char*)v1[i].c_str());
    	gotoxy(i+1,30);
-   	printf("%s\n",(char*)v1[i].c_str());
+   	printf("%s\n",(char*)v[i].c_str());
    }
 gotoxy(29,0);
 struct winsize w;
