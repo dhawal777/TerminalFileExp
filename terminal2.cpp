@@ -15,7 +15,8 @@
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
 stack<string> stack1,stack2;
-void func(string s,stack<string> stack1,stack<string> stack2)
+string s5;
+void func(string s,stack<string> stack1,stack<string> stack2,string s5)
 {
 
    
@@ -48,6 +49,8 @@ char j,j1,j2;
 j=getchar();
 if(j=='\n')
 {
+    if(s==s5&&(strcmp(namelist[q-3]->d_name,"..")==0||strcmp(namelist[q-3]->d_name,".")==0))
+        continue;
 stack1.push(s);
 s=s+"/"+namelist[q-3]->d_name;
 if(namelist[q-3]->d_type==8)
@@ -57,21 +60,21 @@ system(p.c_str());
 }
 else
 {
-func(s,stack1,stack2);
+func(s,stack1,stack2,s5);
 }
 }
 else if(j=='h')
 {
-string p=".";
+//string p=".";
 stack2.push(s);
-func(p,stack1,stack2);
+func(s5,stack1,stack2,s5);
 }
 else if(j==127)
 {
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 }
 else if(j==':')
 {
@@ -134,7 +137,7 @@ if(j2=='D'&&!stack1.empty())
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 
 
 }
@@ -143,13 +146,13 @@ if(j2=='C'&&!stack2.empty())
 string s1=stack2.top();
 stack2.pop();
 stack1.push(s);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 
 }
 }
 }
 string s1=non_canonical(s,r,stack1,stack2);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 }
 
 }
@@ -191,10 +194,13 @@ string s;
 while(1){
 
 s=argv[1];
+string s5=argv[1];
 char j,j1,j2;
 j=getchar();
 if(j=='\n')
 {
+    if(strcmp(namelist[q-3]->d_name,"..")==0||strcmp(namelist[q-3]->d_name,".")==0)
+        continue;
 stack1.push(s);
 s=s+"/"+namelist[q-3]->d_name;
 if(namelist[q-3]->d_type==8)
@@ -204,14 +210,14 @@ system(p.c_str());
 }
 else
 {
-func(s,stack1,stack2);
+func(s,stack1,stack2,s5);
 }
 }
 else if(j=='h')
 {
-string p=".";
-stack2.push(p);
-func(p,stack1,stack2);
+//string p=".";
+stack2.push(s);
+func(s5,stack1,stack2,s5);
 }
 else if(j==127)
 {
@@ -219,7 +225,7 @@ else if(j==127)
 string s1=stack1.top();
 stack1.pop();
 stack2.push(s);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 }
 else if(j==':')
 {
@@ -282,7 +288,7 @@ j2=getchar();
     string s1=stack1.top();
     stack1.pop();
     stack2.push(s);
-   func(s1,stack1,stack2);
+   func(s1,stack1,stack2,s5);
 
     }
     if(j2=='C'&&!stack2.empty())
@@ -290,13 +296,13 @@ j2=getchar();
     string s1=stack2.top();
     stack2.pop();
     stack1.push(s);
-    func(s1,stack1,stack2);
+    func(s1,stack1,stack2,s5);
 
 }
 }
 }
 string s1=non_canonical(s,r,stack1,stack2);
-func(s1,stack1,stack2);
+func(s1,stack1,stack2,s5);
 }
 
 }
