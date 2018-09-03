@@ -98,7 +98,11 @@ for(i=1;i<n;i++)
 {
 int b=copyfile1((char*)v[i].c_str(),(char*)v[n-1].c_str());
 if(b==0)
-{printf("Sorry U Entered Wrong Path");
+{gotoxy(w.ws_row-4,0);
+  printf("Sorry U Entered Wrong Path");
+
+char c1=getchar();
+//char c2=getchar();
 break;
 }
 }
@@ -126,7 +130,10 @@ struct stat st = {0};
  if (stat(folderadd, &st) == -1)
  mkdir(folderadd,666);
  else
+ {gotoxy(w.ws_row-4,0);
  printf("Folder Exist");
+ char c1=getchar();
+}
    }
    else
    {
@@ -135,7 +142,10 @@ struct stat st = {0};
  if (stat(folderadd, &st) == -1)
  mkdir(folderadd,666);
  else
+ {gotoxy(w.ws_row-4,0);
  printf("Folder Exist");
+ char c1=getchar();
+}
    }
 }
 }
@@ -181,7 +191,11 @@ if(strcmp(v[0].c_str(),"rename")==0)
 	if(y)
 	rename((char*)v[1].c_str(),(char*)v[n-1].c_str());
     else
+    {
+      gotoxy(w.ws_row-4,0);
     cout<<"NO SUCH FILE IN CURRENT DIRECTORY"<<endl;
+    char c1=getchar();
+  }
 }
 ////////////////////DELETE FILE/////////////////////////////
 if(strcmp(v[0].c_str(),"delete_file")==0)
@@ -191,11 +205,15 @@ if(strcmp(v[0].c_str(),"delete_file")==0)
 	bool y=search1((char*)s.c_str(),0,(char*)v[1].c_str());
 	if(y)
 	{remove(v[1].c_str());
+    gotoxy(w.ws_row-4,0);
 	printf("Deleted Files");
+  char c1=getchar();
     }
     else
     {
+      gotoxy(w.ws_row-4,0);
     	cout<<"NO SUCH FILE"<<endl;
+      char c1=getchar();
     }
 
 }
@@ -203,7 +221,9 @@ if(strcmp(v[0].c_str(),"delete_file")==0)
 if(strcmp(v[0].c_str(),"delete_folder")==0)
 {
 	deletedir((char*)v[1].c_str());
+  gotoxy(w.ws_row-4,0);
 	printf("Deleted");
+  char c1=getchar();
 }
 /////////////////GOTO////////////////////////////////////////
 if(strcmp(v[0].c_str(),"goto")==0)
@@ -218,7 +238,9 @@ if(strcmp(v[0].c_str(),"snapshot")==0)
 //printf("Directory scan of %s\n",topdir);
 
 ls_r((char*)v[1].c_str(),(char*)v[2].c_str());
+gotoxy(w.ws_row-4,0);
 printf("Snapshot done open file %s\n",(char*)v[2].c_str());
+char c1=getchar();
 }
 ////////////////////////MOVE///////////////////////////////////
 if(strcmp(v[0].c_str(),"move")==0)
@@ -234,41 +256,54 @@ if(strcmp(v[0].c_str(),"move")==0)
 		   {
 		    int b=copyfile1((char*)v[i].c_str(),(char*)v[n-1].c_str());
 		     if(b==0)
-		    {printf("Sorry U Entered Wrong Path");
+		    {gotoxy(w.ws_row-4,0);
+          printf("Sorry U Entered Wrong Path");
 		       xx=1;
+           char c1=getchar();
 		    break;
 		    }
 		    remove((char*)v[i].c_str());
 		   }
 		   if(xx==0)
+       {gotoxy(w.ws_row-4,0);
 		   printf("Moved Files");
+       char c1=getchar();
+     }
    }
    else
    {
        char * r= mkdir1((char*)v[1].c_str(),(char*)v[2].c_str());
         move((char*)v[1].c_str(),0,r);
+        gotoxy(w.ws_row-4,0);
         printf("+Moved Directories\n");
+        char c1=getchar();
    }
 }
 ///////////////////////////SEARCH/////////////////////////////////////////
 if(strcmp(v[0].c_str(),"search")==0)
 {
-	cout<<"hello"<<endl;
+	//cout<<"hello"<<endl;
 	string s1=".";
 	bool y=search1((char*)s1.c_str(),0,(char*)v[1].c_str());
 	if(y)
 	{
-		cout<<"champ"<<endl;
+		//cout<<"champ"<<endl;
 		search2((char*)s1.c_str(),0,(char*)v[1].c_str(),s);
 		k5=1;
 		//cout<<"I am back"<<endl;
 		
 	}
 	else
-	{
+	{gotoxy(w.ws_row-4,0);
 		cout<<"NO SUCH FILE EXIST"<<endl;
 	}	
   //break;
+}
+else
+{
+  gotoxy(w.ws_row-4,0);
+    cout<<"No Such Command in Explorer"<<endl;
+   char c=getchar();
 }
 if(k5==1)
     {
